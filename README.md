@@ -1,0 +1,2 @@
+# OrthelloGameAI
+ a game..

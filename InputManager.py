@@ -18,4 +18,4 @@ class InputManager:
         row_index = y // board.row_size
 
         if 0 <= col_index < board.size and 0 <= row_index < board.size:
-            InputManager._input = (row_index, col_index)
+            InputManager._input = (col_index, row_index)

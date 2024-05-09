@@ -1,7 +1,7 @@
 import Board
 import pygame
 import InputManager
-
+import GameManager
 
 class MainClass(object):
     def __init__(self) -> None:
@@ -13,17 +13,17 @@ class MainClass(object):
         pygame.display.set_caption('Othello')
         pygame.display.flip()
 
-        
-        board = Board.Board(screen,8)
-        board.UpdateBoard(2,2,Board.SlotStates.BLACK.value) 
-        board.UpdateBoard(1,2,Board.SlotStates.WHITE.value)
-
+        game_manager = GameManager.GameManager(screen, Board.Board(screen, 8))
+        game_manager.CalculateAvailableMoves()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     return
-            InputManager.InputManager.update_hovered_index(pygame.mouse.get_pos(), board)
-            board.draw(screen)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    game_manager.OnCellClicked()
+
+            InputManager.InputManager.update_hovered_index(pygame.mouse.get_pos(), game_manager.board)
+            game_manager.board.draw(screen)
             pygame.display.update()
                 
 mainclass = MainClass() 

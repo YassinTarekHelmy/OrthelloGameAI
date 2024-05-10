@@ -22,18 +22,17 @@ class GameManager(object):
         self.CurrentPlayer = self.players[self.boardState]
 
     def RunGame(self):
-        while True:
+        self.board.DeclareWinner(self.screen)
+        NoValid = 0
+        while self.boardState != BoardStates.GAME_OVER:
             self.CurrentPlayer = self.players[self.boardState]
             if self.CalculateAvailableMoves():
                 self.CurrentPlayer.Run_Game(self.screen, self.board)
-                self.board.PrintBoard()
+                NoValid = 0
             else:
-                self.ChangeTurn() 
-                if not self.CalculateAvailableMoves():
-                    break 
-                else:
-                    self.CurrentPlayer.Run_Game(self.screen, self.board)
-                    self.board.PrintBoard()
+                NoValid += 1
+                if NoValid == 2:
+                    self.boardState = BoardStates.GAME_OVER
             self.ChangeTurn()
             self.CalculateScore()
             self.NotifyPlayers()
@@ -94,7 +93,8 @@ class GameManager(object):
         self.Player2Strategy.UpdateBoardState(self.boardState)
 
     def ChangeTurn(self):
-        self.boardState = BoardStates.WHITE_TURN if self.boardState == BoardStates.BLACK_TURN else BoardStates.BLACK_TURN
+        if (self.boardState != BoardStates.GAME_OVER):
+            self.boardState = BoardStates.WHITE_TURN if self.boardState == BoardStates.BLACK_TURN else BoardStates.BLACK_TURN
     
     def CalculateScore(self):
         self.board.Player1Score = 0
@@ -105,3 +105,4 @@ class GameManager(object):
                     self.board.Player1Score += 1
                 elif self.board.board[i][j] == SlotStates.WHITE.value:
                     self.board.Player2Score += 1
+    

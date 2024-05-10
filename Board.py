@@ -75,7 +75,8 @@ class Board:
     def DrawWinner(self,screen,winner, color):
         font = pygame.font.Font(None, 36)
         text = font.render(winner + " wins!", True, color)
-        screen.blit(text, (self.padding, 70))
+        screen.blit(text, (self.padding + 300, 30))
+        pygame.display.flip()
 
     def SetTokens(self, screen):
         for row in range(self.size):

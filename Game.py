@@ -54,7 +54,6 @@ class HumanStrategy(GameStrategy):
         if (board.board[y_pos][x_pos] != Board.SlotStates.AvailableMove.value):
             return False
         
-        self
         flanks = self.gameManager.CalculateFlanks(y_pos, x_pos,board)
         
         for (x, y) in flanks:

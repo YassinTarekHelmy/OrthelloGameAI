@@ -11,7 +11,11 @@ class SlotStates(enum.Enum):
 
 class Board:
     def __init__(self,screen,size):
+        self.Player1Score = 0
+        self.Player2Score = 0
+        
         self.size = size
+        
         self.board = [[0 for _ in range(size)] for _ in range(size)]
         self.board[size//2][size//2] = SlotStates.BLACK.value
         self.board[size//2-1][size//2-1] = SlotStates.BLACK.value
@@ -37,6 +41,7 @@ class Board:
         # Draw border around the board
         pygame.draw.rect(screen, self.border_color, pygame.Rect(self.padding, self.top_padding, self.board_width, self.board_height), self.border_thickness)
         
+        self.DrawScore(screen)
         self.DrawMouseHover(screen)
         self.DrawGrid(screen)
         self.SetTokens(screen)
@@ -44,6 +49,10 @@ class Board:
     def get_board(self):
         return self.board
     
+    def SetScore(self, player1Score, player2Score):
+        self.Player1Score = player1Score
+        self.Player2Score = player2Score
+
     def UpdateBoard(self ,row, col, slotStates):
             self.board[row][col] = slotStates
         
@@ -56,6 +65,17 @@ class Board:
         for i in range(self.size + 1):
             y = self.top_padding + i * self.row_size
             pygame.draw.line(screen, self.border_color, (self.padding, y), (self.padding + self.board_width, y), 2)
+
+    def DeclareWinner(self, screen):
+        if (self.Player1Score > self.Player2Score):
+            self.DrawWinner(screen, "Player 1", (0,0,0))
+        else:
+            self.DrawWinner(screen, "Player 2", (255,255,255))
+
+    def DrawWinner(self,screen,winner, color):
+        font = pygame.font.Font(None, 36)
+        text = font.render(winner + " wins!", True, color)
+        screen.blit(text, (self.padding, 70))
 
     def SetTokens(self, screen):
         for row in range(self.size):
@@ -86,8 +106,18 @@ class Board:
 
         pygame.draw.rect(screen, self.hover_color, pygame.Rect(x_Rect, y_Rect, self.column_size, self.row_size))
 
+    def DrawScore(self, screen):
+        font = pygame.font.Font(None, 36)
+        text = font.render("Player 1: " + str(self.Player1Score), True, (0, 0, 0))
+        screen.blit(text, (self.padding, 10))
+
+        text = font.render("Player 2: " + str(self.Player2Score), True, (0, 0, 0))
+        screen.blit(text, (self.padding, 40))
     
-        
+    def PrintBoard(self):
+        for row in self.board:
+            print(row)
+        print("\n")
         
 
                     

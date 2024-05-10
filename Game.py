@@ -31,6 +31,7 @@ class AIStrategy(GameStrategy):
     def MakeMove(self,board):
         print("AI is making a move")
 
+
 class HumanStrategy(GameStrategy):
     def Run_Game(self,screen,board):
         isTurnOver = False
@@ -46,10 +47,6 @@ class HumanStrategy(GameStrategy):
             GameStrategy.Run_Game(self, screen, board)
             if isTurnOver:
                 break
-
-
-    def MakeMove(self,board):
-        pass
 
     def OnCellClicked(self,board):
         (x_pos, y_pos) = InputManager.InputManager.get_input()

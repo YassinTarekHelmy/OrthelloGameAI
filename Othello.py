@@ -13,11 +13,8 @@ class MainClass(object):
         pygame.display.flip()
 
         game_manager = GameManager.GameManager(screen, Board.Board(screen, 8))
+        
         game_manager.RunGame()
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    return
 
                 
 mainclass = MainClass() 

@@ -13,7 +13,7 @@ class Board:
     def __init__(self,screen,size):
         self.Player1Score = 0
         self.Player2Score = 0
-        
+        self.screen = screen
         self.size = size
         
         self.board = [[0 for _ in range(size)] for _ in range(size)]
@@ -117,9 +117,25 @@ class Board:
     
     def PrintBoard(self):
         for row in self.board:
-            print(row)
-        print("\n")
+            for col in row:
+                if col == SlotStates.AvailableMove.value:
+                    print("A", end=" ")
+                elif col == SlotStates.BLACK.value:
+                    print("B", end=" ")
+                elif col == SlotStates.WHITE.value:
+                    print("W", end=" ")
+                else:
+                    print("0", end=" ")
+            print("\n")
         
+    def CopyBoard(self):
+        copied_board = Board(self.screen, self.size)
+        copied_board.Player1Score = self.Player1Score
+        copied_board.Player2Score = self.Player2Score
+        copied_board.board = [row[:] for row in self.board]
+
+        return copied_board
+
 
                     
                

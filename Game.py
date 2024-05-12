@@ -27,7 +27,7 @@ class AIStrategy(GameStrategy):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
-        self.MakeMove(board,6)
+        self.MakeMove(board,3)
         GameStrategy.Run_Game(self, screen, board)
 
     def MakeMove(self, board, depth):
@@ -48,6 +48,7 @@ class AIStrategy(GameStrategy):
         if bestMove is not None:
             flanks = self.gameManager.CalculateFlanks(bestMove[0], bestMove[1], board, self.playerColor)
             self.gameManager.PlotFlank(bestMove[0], bestMove[1],flanks,self.playerColor, board)
+            time.sleep(1)
         return bestMove
 
 

@@ -35,9 +35,11 @@ class GameManager(object):
                 if NoValid == 2:
                     self.boardState = BoardStates.GAME_OVER
             self.ChangeTurn()
-            self.CalculateScore(self.board)
             self.NotifyPlayers()
+            self.CalculateScore(self.board)
+            self.board.draw(self.screen)
         self.board.DeclareWinner(self.screen)
+        pygame.display.update()
         time.sleep(5)
 
     
@@ -104,7 +106,6 @@ class GameManager(object):
                     board.Player1Score += 1
                 elif board.board[i][j] == SlotStates.WHITE.value:
                     board.Player2Score += 1
-        pygame.display.flip()
     
     def PlotFlank(self, x , y ,flanks, playerColor, board):
         for (fx, fy) in flanks:

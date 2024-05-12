@@ -13,17 +13,21 @@ class BoardStates(enum.Enum):
 
 
 class GameManager(object):
-    def __init__(self, screen, board):
+    def __init__(self, screen, board, difficulty, isDifficultyDisabled):
         self.screen = screen
         self.board = board
         self.board.draw(self.screen)
         self.boardState = BoardStates.BLACK_TURN
         self.Player1Strategy = Game.HumanStrategy(SlotStates.BLACK.value, self.boardState, self)
-        self.Player2Strategy = Game.AIStrategy(SlotStates.WHITE.value, self.boardState,self)
+        if  isDifficultyDisabled:
+            self.Player2Strategy = Game.HumanStrategy(SlotStates.WHITE.value, self.boardState, self)
+        else:
+            self.Player2Strategy = Game.AIStrategy(SlotStates.WHITE.value, self.boardState,self,difficulty)
         self.players = {BoardStates.BLACK_TURN: self.Player1Strategy, BoardStates.WHITE_TURN: self.Player2Strategy}
         self.CurrentPlayer = self.players[self.boardState]
 
     def RunGame(self):
+        
         NoValid = 0
         while self.boardState != BoardStates.GAME_OVER:
             self.CurrentPlayer = self.players[self.boardState]

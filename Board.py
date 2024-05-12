@@ -46,6 +46,7 @@ class Board:
         self.DrawGrid(screen)
         self.SetTokens(screen)
 
+
     def get_board(self):
         return self.board
     

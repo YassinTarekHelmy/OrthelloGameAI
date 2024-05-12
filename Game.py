@@ -27,7 +27,7 @@ class AIStrategy(GameStrategy):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
-        self.MakeMove(board,1)
+        self.MakeMove(board,6)
         GameStrategy.Run_Game(self, screen, board)
 
     def MakeMove(self, board, depth):

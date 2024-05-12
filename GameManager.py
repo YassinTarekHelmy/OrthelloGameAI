@@ -1,6 +1,8 @@
 
 import enum
 import time
+
+import pygame
 from Board import SlotStates
 import Game
 
@@ -98,10 +100,11 @@ class GameManager(object):
         board.Player2Score = 0
         for i in range(self.board.size):
             for j in range(self.board.size):
-                if self.board.board[i][j] == SlotStates.BLACK.value:
-                    self.board.Player1Score += 1
-                elif self.board.board[i][j] == SlotStates.WHITE.value:
-                    self.board.Player2Score += 1
+                if board.board[i][j] == SlotStates.BLACK.value:
+                    board.Player1Score += 1
+                elif board.board[i][j] == SlotStates.WHITE.value:
+                    board.Player2Score += 1
+        pygame.display.flip()
     
     def PlotFlank(self, x , y ,flanks, playerColor, board):
         for (fx, fy) in flanks:

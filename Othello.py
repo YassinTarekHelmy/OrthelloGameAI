@@ -3,6 +3,8 @@ import Board
 import pygame
 import GameManager
 
+
+# Main Class is the class resposible for initializing the entire program.
 class MainClass(object):
     def __init__(self) -> None:
         self.CurrentDisplay = StartMenu(self)
@@ -11,6 +13,8 @@ class MainClass(object):
         self.CurrentDisplay.Run()
         
 
+
+#this class initialized the board screen through the Run function.
 class GameScreen(object):
     def __init__(self, difficulty, isDifficultyDisabled) -> None:
         self.difficulty = difficulty
@@ -21,9 +25,11 @@ class GameScreen(object):
         pygame.display.set_caption('Othello')
         pygame.display.flip()
         
-        game_manager = GameManager.GameManager(screen, Board.Board(screen, 8),self.difficulty,self.isDifficultyDisabled)
+        game_manager = GameManager.GameManager(screen,self.difficulty,self.isDifficultyDisabled)
         game_manager.RunGame()
 
+
+#the Start Menu Class is made using the pygame gui library.
 class StartMenu(object):
     def __init__(self, mainClass) -> None:
         self.mainClass = mainClass
@@ -40,6 +46,7 @@ class StartMenu(object):
         background.fill((4, 175, 112))
         self.DrawGUI(manager,screen, background)
 
+    #this is the function responsible for Drawing the entire GUI of the Start menu and managing it.
     def DrawGUI(self, manager,screen,background):
         start_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((250, 200), (100, 50)), text='Start', manager=manager)
         
@@ -55,12 +62,14 @@ class StartMenu(object):
 
         AIDifficultyList.disable()
         while True:
+            # Handling the Events of the Menu.
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit(0)
                     
                 manager.process_events(event)
                 
+                # drop down menu event handling
                 if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                     if event.ui_element == dropDownList:
                         selected_value = event.text
@@ -80,6 +89,8 @@ class StartMenu(object):
                         elif selected_difficulty == "Hard":
                             self.difficulty_level = 5
 
+
+                # button event handling
                 if event.type == pygame_gui.UI_BUTTON_PRESSED:
                     if event.ui_element == start_button:
                         self.StartGame()
@@ -89,7 +100,7 @@ class StartMenu(object):
             manager.draw_ui(screen)
             pygame.display.flip()
 
-
+    #this is the function that sets the current display to the GameScreen and is subscribed to the start button..
     def StartGame(self):
         self.mainClass.CurrentDisplay = GameScreen(self.difficulty_level, self.isDifficultyDisabled)
         self.mainClass.CurrentDisplay.Run()

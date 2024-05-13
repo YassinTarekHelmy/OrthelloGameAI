@@ -2,26 +2,35 @@
 import pygame
 import enum
 import InputManager
+import copy
 
 class SlotStates(enum.Enum):
     AvailableMove = -2
     WHITE = -1
     BLACK = 1
-    
+
+
 
 class Board:
-    def __init__(self,screen,size):
+    def __init__(self,screen,size,player1Data,player2Data):
         self.Player1Score = 0
         self.Player2Score = 0
+        self.player1Data = player1Data
+        self.player2Data = player2Data
+        self.playerDataRecord  = {player1Data.playerColor:player1Data,player2Data.playerColor:player2Data}
         self.screen = screen
         self.size = size
         
+        #initializing the board.
         self.board = [[0 for _ in range(size)] for _ in range(size)]
+
+        #adding the base of the board.
         self.board[size//2][size//2] = SlotStates.BLACK.value
         self.board[size//2-1][size//2-1] = SlotStates.BLACK.value
         self.board[size//2][size//2-1] = SlotStates.WHITE.value
         self.board[size//2-1][size//2] = SlotStates.WHITE.value
 
+        #refining the look of the board.
         self.border_thickness = 5
         self.circle_border_thickness = 2
         self.padding = 35  # padding from screen edges
@@ -36,6 +45,9 @@ class Board:
         self.border_around_tokens = (172, 225, 175)
         self.available_move_color = (5, 237, 152)
         self.hover_color = (5, 237, 152)
+
+    #this function handles the entire drawing of the board and is being called each frame from the game loop
+    #to keep up with every thing that is changed in the board.
     def draw(self, screen):
         pygame.draw.rect(screen, self.background_color, pygame.Rect(0,0,screen.get_width(), screen.get_height()))  # Draw background
         # Draw border around the board
@@ -59,10 +71,12 @@ class Board:
         
 
     def DrawGrid(self, screen):
+        #starting from the side padding and drawing the horizontal lines.
         for i in range(self.size + 1):
             x = self.padding + i * self.column_size
             pygame.draw.line(screen, self.border_color, (x, self.top_padding), (x, self.top_padding + self.board_height), 2)
 
+        #starting from the top padding and drawing the vertical lines.
         for i in range(self.size + 1):
             y = self.top_padding + i * self.row_size
             pygame.draw.line(screen, self.border_color, (self.padding, y), (self.padding + self.board_width, y), 2)
@@ -101,6 +115,7 @@ class Board:
                     pygame.draw.circle(screen, self.border_around_tokens, (circle_x, circle_y), 20, self.circle_border_thickness)
                     pygame.draw.circle(screen, color, (circle_x, circle_y), 20, 0)
 
+    # drawing the Mouse hover on the screen by getting the position of the mouse and calculating the position.
     def DrawMouseHover(self, screen):
         (x_pos,y_pos) = InputManager.InputManager.get_input()
         x_Rect = x_pos * self.column_size + self.padding
@@ -130,13 +145,10 @@ class Board:
             print("\n")
         
     def CopyBoard(self):
-        copied_board = Board(self.screen, self.size)
-        copied_board.Player1Score = self.Player1Score
-        copied_board.Player2Score = self.Player2Score
-        copied_board.board = [row[:] for row in self.board]
-
+        copied_board = copy.deepcopy(self)
         return copied_board
 
-
+    def ReduceTokens(self,playerColor):
+        self.playerDataRecord[playerColor].playerTokens -= 1
                     
                

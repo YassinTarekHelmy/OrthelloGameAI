@@ -84,6 +84,8 @@ class Board:
     def DeclareWinner(self, screen):
         if (self.Player1Score > self.Player2Score):
             self.DrawWinner(screen, "Player 1", (0,0,0))
+        elif (self.Player1Score == self.Player2Score):
+            self.DrawWinner(screen, "It's a Tie", (127,127,127))
         else:
             self.DrawWinner(screen, "Player 2", (255,255,255))
 

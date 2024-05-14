@@ -75,10 +75,10 @@ class GameManager(object):
         self.CalculateFlanksUtil(x_pos, y_pos, flanks,[(0,1),(0,-1)], currentColor,opponentColor,board)
         
         #diagonal direction.
-        self.CalculateFlanksUtil(x_pos, y_pos, flanks,[(1,1),(-1,-1)], currentColor,opponentColor,board)
+        #self.CalculateFlanksUtil(x_pos, y_pos, flanks,[(1,1),(-1,-1)], currentColor,opponentColor,board)
 
         #opposite diagonal direction.
-        self.CalculateFlanksUtil(x_pos, y_pos, flanks,[(1,-1),(-1,1)], currentColor,opponentColor,board)
+        #self.CalculateFlanksUtil(x_pos, y_pos, flanks,[(1,-1),(-1,1)], currentColor,opponentColor,board)
         return flanks
 
     #calculating the available moves for the player.

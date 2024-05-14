@@ -13,8 +13,8 @@ class SlotStates(enum.Enum):
 
 class Board:
     def __init__(self,screen,size,player1Data,player2Data):
-        self.Player1Score = 0
-        self.Player2Score = 0
+        self.Player1Score = 2
+        self.Player2Score = 2
         self.player1Data = player1Data
         self.player2Data = player2Data
         self.playerDataRecord  = {player1Data.playerColor:player1Data,player2Data.playerColor:player2Data}
@@ -57,6 +57,7 @@ class Board:
         self.DrawMouseHover(screen)
         self.DrawGrid(screen)
         self.SetTokens(screen)
+        pygame.display.flip()
 
 
     def get_board(self):

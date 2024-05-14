@@ -81,11 +81,11 @@ class Board:
             y = self.top_padding + i * self.row_size
             pygame.draw.line(screen, self.border_color, (self.padding, y), (self.padding + self.board_width, y), 2)
 
-    def DeclareWinner(self, screen):
+    def DeclareGameState(self, screen):
         if (self.Player1Score > self.Player2Score):
             self.DrawWinner(screen, "Player 1", (0,0,0))
         elif (self.Player1Score == self.Player2Score):
-            self.DrawWinner(screen, "It's a Tie", (127,127,127))
+            self.DrawTie(screen, (144,144,144))
         else:
             self.DrawWinner(screen, "Player 2", (255,255,255))
 
@@ -95,6 +95,11 @@ class Board:
         screen.blit(text, (self.padding + 300, 30))
         pygame.display.flip()
 
+    def DrawTie(self,screen,color):
+        font = pygame.font.Font(None, 36)
+        text = font.render( "It's a Tie!",True, color)
+        screen.blit(text, (self.padding + 300, 30))
+        pygame.display.flip()
     def SetTokens(self, screen):
         for row in range(self.size):
             for col in range(self.size):

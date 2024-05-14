@@ -58,7 +58,7 @@ class GameManager(object):
             self.NotifyPlayers()
             self.CalculateScore(self.board)
             self.board.draw(self.screen)
-        self.board.DeclareWinner(self.screen)
+        self.board.DeclareGameState(self.screen)
         pygame.display.update()
         time.sleep(5)
 

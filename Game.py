@@ -56,7 +56,7 @@ class AIStrategy(GameStrategy):
                 simulationBoard.ReduceTokens(self.playerColor)        
                 
                 #the recursive function to get the value of the play.        
-                value = self.AlphaBetaBruining(simulationBoard, opponentColor, depth - 1, bestVal, worstVal)
+                value = self.AlphaBetaPruining(simulationBoard, opponentColor, depth - 1, bestVal, worstVal)
                 
                 #If we have a value that is better that what we already discoverd then this is our new best move.
                 if value > bestVal:
@@ -76,52 +76,51 @@ class AIStrategy(GameStrategy):
 
 
     #the recursive function.
-    def AlphaBetaBruining(self, board, playerColor, depth, alpha, beta):
+    def AlphaBetaPruining(self, board, playerColor, depth, alpha, beta):
         # a simulated game ends if the depth is equal to 0 or if one of the players has no tokens.
         if depth == 0 or board.player1Data.playerTokens == 0 or board.player2Data.playerTokens == 0:
             #score is our utility function there was a way to do it statistically but it was going to be
             #too much work.
-            
             self.gameManager.CalculateScore(board)
             return board.Player2Score - board.Player1Score
         
+        opponentColor = Board.SlotStates.WHITE.value if playerColor == Board.SlotStates.BLACK.value else Board.SlotStates.BLACK.value
+        available = self.gameManager.CalculateAvailableMoves(board, playerColor)
+
+        if len(available) == 0:
+            return self.AlphaBetaPruining(board, opponentColor, depth - 1, alpha, beta)
+        
         #if the player is the current player then we want to maximize the value.
         if playerColor == self.playerColor:
-            opponentColor = Board.SlotStates.WHITE.value if playerColor == Board.SlotStates.BLACK.value else Board.SlotStates.BLACK.value
             bestValue = -1000
 
             #same as what we did above.
-            available = self.gameManager.CalculateAvailableMoves(board, playerColor)
-            if len(available) > 0:
-                for (x, y) in available:
-                    flanks = self.gameManager.CalculateFlanks(x, y, board, playerColor)
-                    simulationBoard = board.CopyBoard()
-                    self.gameManager.PlotFlank(x, y,flanks ,playerColor, simulationBoard)
-                    simulationBoard.ReduceTokens(playerColor)
-                    value = self.AlphaBetaBruining(simulationBoard, opponentColor, depth - 1, alpha, beta)
-                    bestValue = max(bestValue, value)
-                    alpha = max(alpha, bestValue)
-                    if beta <= alpha:   #pruning the tree.
-                        break        
+            for (x, y) in available:
+                flanks = self.gameManager.CalculateFlanks(x, y, board, playerColor)
+                simulationBoard = board.CopyBoard()
+                self.gameManager.PlotFlank(x, y,flanks ,playerColor, simulationBoard)
+                simulationBoard.ReduceTokens(playerColor)
+                value = self.AlphaBetaPruining(simulationBoard, opponentColor, depth - 1, alpha, beta)
+                bestValue = max(bestValue, value)
+                alpha = max(alpha, bestValue)
+                if beta <= alpha:   #pruning the tree.
+                    break        
             return bestValue
         else:
             # here we want to minimize the opponent.
-            opponentColor = Board.SlotStates.WHITE.value if playerColor == Board.SlotStates.BLACK.value else Board.SlotStates.BLACK.value
             bestValue = 1000
             
             #same as what we did above.
-            available = self.gameManager.CalculateAvailableMoves(board, playerColor)
-            if len(available) > 0:
-                for (x, y) in available:
-                    flanks = self.gameManager.CalculateFlanks(x, y, board, playerColor)
-                    simulationBoard = board.CopyBoard()
-                    self.gameManager.PlotFlank(x, y,flanks ,playerColor, simulationBoard)
-                    simulationBoard.ReduceTokens(playerColor)
-                    value = self.AlphaBetaBruining(simulationBoard, opponentColor, depth - 1, alpha, beta)    
-                    bestValue = min(bestValue, value)
-                    beta = min(beta, bestValue)
-                    if beta <= alpha:
-                        break
+            for (x, y) in available:
+                flanks = self.gameManager.CalculateFlanks(x, y, board, playerColor)
+                simulationBoard = board.CopyBoard()
+                self.gameManager.PlotFlank(x, y,flanks ,playerColor, simulationBoard)
+                simulationBoard.ReduceTokens(playerColor)
+                value = self.AlphaBetaPruining(simulationBoard, opponentColor, depth - 1, alpha, beta)    
+                bestValue = min(bestValue, value)
+                beta = min(beta, bestValue)
+                if beta <= alpha:
+                    break    
             return bestValue
 
         

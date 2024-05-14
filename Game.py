@@ -28,11 +28,11 @@ class AIStrategy(GameStrategy):
     def __init__(self,playerColor,boardState, gameManager, depth):
         GameStrategy.__init__(self, playerColor, boardState, gameManager)
         self.depth = depth
-    def Run_Game(self,screen,board,depth = 3):
+    def Run_Game(self,screen,board):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
-        self.MakeMove(board,depth)
+        self.MakeMove(board,self.depth)
         GameStrategy.Run_Game(self, screen, board)
 
 

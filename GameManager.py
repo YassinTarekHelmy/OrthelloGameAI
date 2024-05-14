@@ -54,6 +54,7 @@ class GameManager(object):
                 if NoValid == 2:
                     #if two turns were skipped then the game is over.
                     self.boardState = BoardStates.GAME_OVER
+            self.ResetAvailableMoves(self.board)
             self.ChangeTurn()
             self.NotifyPlayers()
             self.CalculateScore(self.board)

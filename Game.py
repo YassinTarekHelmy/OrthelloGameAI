@@ -28,11 +28,13 @@ class AIStrategy(GameStrategy):
     def __init__(self,playerColor,boardState, gameManager, depth):
         GameStrategy.__init__(self, playerColor, boardState, gameManager)
         self.depth = depth
+
     def Run_Game(self,screen,board):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit(0)
-        self.MakeMove(board,self.depth)
+        bestMove = self.MakeMove(board,self.depth)
+        board.lastTokenPlayed = bestMove
         GameStrategy.Run_Game(self, screen, board)
 
 
@@ -66,7 +68,7 @@ class AIStrategy(GameStrategy):
             #apply the best move to the main board.
             flanks = self.gameManager.CalculateFlanks(bestMove[0], bestMove[1], board, self.playerColor)
             self.gameManager.PlotFlank(bestMove[0], bestMove[1],flanks,self.playerColor, board)
-            
+           
             #this is to reduce the time of the Ai Play to know what is he doing.
             time.sleep(1) 
 
@@ -160,4 +162,5 @@ class HumanStrategy(GameStrategy):
         #plotting the flanks on board.
         self.gameManager.PlotFlank(y_pos, x_pos, flanks, self.playerColor, board)
         board.playerDataRecord[self.playerColor].playerTokens -= 1
+        board.lastTokenPlayed = (y_pos, x_pos)
         return True

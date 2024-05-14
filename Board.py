@@ -45,7 +45,9 @@ class Board:
         self.border_around_tokens = (172, 225, 175)
         self.available_move_color = (5, 237, 152)
         self.hover_color = (5, 237, 152)
+        self.lastTokenColor = (255, 191, 153)
 
+        self.lastTokenPlayed = None
     #this function handles the entire drawing of the board and is being called each frame from the game loop
     #to keep up with every thing that is changed in the board.
     def draw(self, screen):
@@ -55,6 +57,8 @@ class Board:
         
         self.DrawScore(screen)
         self.DrawMouseHover(screen)
+        if (self.lastTokenPlayed != None):
+            self.DrawToCellColor(self.lastTokenPlayed[1], self.lastTokenPlayed[0])
         self.DrawGrid(screen)
         self.SetTokens(screen)
         pygame.display.flip()
@@ -159,4 +163,9 @@ class Board:
     def ReduceTokens(self,playerColor):
         self.playerDataRecord[playerColor].playerTokens -= 1
                     
-               
+    def DrawToCellColor(self, x, y):
+        x_Rect = x * self.column_size + self.padding
+        y_Rect = y * self.row_size + self.top_padding
+
+        pygame.draw.rect(self.screen, self.lastTokenColor, pygame.Rect(x_Rect, y_Rect, self.column_size, self.row_size))
+        
